@@ -94,10 +94,10 @@ class SplashScreen extends React.Component {
   }
 
   componentDidMount = () => {
-    let ll = localStorage.getItem("last_login")
-    if(ll){
-      this.onConnectProceed(JSON.parse(ll))
-    }
+    // let ll = localStorage.getItem("last_login")
+    // if(ll){
+    //   this.onConnectProceed(JSON.parse(ll))
+    // }
   }
 
   onConnectProceed = (d) => {

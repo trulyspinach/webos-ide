@@ -33,7 +33,8 @@ class FileEditService:
         self.rope = Rope(self.content)
 
         self.methods = {
-            'edit': self.on_edit
+            'edit': self.on_edit,
+            'mov_cursor': self.on_move_cursor
         }
 
 
@@ -56,7 +57,6 @@ class FileEditService:
         print(self.rope)
         for k in self.users.keys():
             if k == name: continue
-
             await self.users[k].send(pack_message('f_obj',
                 {
                 'id':self.id,
@@ -65,5 +65,22 @@ class FileEditService:
                 }
             ))
 
+    async def on_move_cursor(self, name, d):
+        ddv = d['v']
+        col = ddv['l']
+        line = ddv['c']
+
+        for k in self.users.keys():
+            if k == name: continue
+
+            await self.users[k].send(pack_message('f_obj',
+                {
+                'id':self.id,
+                'fm':'mov_cursor',
+                'v':d['v']
+                }
+            ))
+
     async def on_message(self,d, name):
+        # print(self.methods.get(d['fm'], None))
         await self.methods[d['fm']](name, d)

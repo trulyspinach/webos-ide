@@ -82,9 +82,9 @@ rope_tree_index(tnode *l, int index) {
 
 tnode *
 rope_tree_split(tnode *old, int index) {
-    printf("ssssssssssssssssssssssssssssssssssssssssssssssss\n");
-    printf("kms%d\n", old->w_self);
-        printTreeCaller(old);
+    // printf("ssssssssssssssssssssssssssssssssssssssssssssssss\n");
+    // printf("kms%d\n", old->w_self);
+        // printTreeCaller(old);
     int start = 0;
     tnode *curNode = NULL;
     tnode *l = old;
@@ -96,11 +96,12 @@ rope_tree_split(tnode *old, int index) {
             l = l->right;
         }
     }
-    
+
     // Right inclusive
     tnode *nr = rope_tnode_alloc(PyUnicode_Substring(l->val, index - start, PyUnicode_GET_LENGTH(l->val)));
     curNode = nr;
     l->val = PyUnicode_Substring(l->val, 0, index - start);
+    Py_INCREF(l->val);
     l->w_all = PyUnicode_GetLength(l->val);
     Py_ssize_t s = 0;
     PyUnicode_AsUTF8AndSize(l->val, &s);
@@ -111,8 +112,8 @@ rope_tree_split(tnode *old, int index) {
     int w_allChange;
     int w_utfChange;
     if(l != old){
-        
-        printf("s2 %d %d\n", l->parent->w_self, l->w_all);
+
+        // printf("s2 %d %d\n", l->parent->w_self, l->w_all);
         int val = 0;
         int val2 = 0;
         if(l->parent->left == l && l->parent->right != NULL){
@@ -131,38 +132,38 @@ rope_tree_split(tnode *old, int index) {
     //printf("%d %d %d\n", w_selfChange, w_allChange, w_utfChange);
 
     while(l != old){
-        printf("%p\n", l);
+        // printf("%p\n", l);
         if(l->parent->left == l){
-            printf("%d %d %d %d\n", l->parent->w_self, w_allChange, w_utfChange, w_selfChange);
+            // printf("%d %d %d %d\n", l->parent->w_self, w_allChange, w_utfChange, w_selfChange);
             l->parent->w_self -= w_selfChange;
             if(l->parent->right != NULL){
-                printf("spss%d %d %d %d\n", l->parent->w_self, w_allChange, w_utfChange, w_selfChange);
+                // printf("spss%d %d %d %d\n", l->parent->w_self, w_allChange, w_utfChange, w_selfChange);
                 w_allChange += l->parent->right->w_all;
                 w_utfChange += l->parent->right->utf8size_all;
                 w_selfChange += l->parent->right->w_all;
                 curNode = rope_tree_concat(curNode, l->parent->right);
-                printf("%p %d %d %d\n", l->parent->right, w_allChange, w_utfChange, w_selfChange);
+                // printf("%p %d %d %d\n", l->parent->right, w_allChange, w_utfChange, w_selfChange);
                 //l->parent->right->w_self = NULL;
-                
+
             }else{
-                printf("%p\n", l);
+                // printf("%p\n", l);
             }
 
             l->parent->w_all -=w_allChange;
             l->parent->utf8size_all -= w_utfChange;
         }else{
-            
-            printf("sss%d %d\n", w_selfChange, l->w_all);
+
+            // printf("sss%d %d\n", w_selfChange, l->w_all);
             w_allChange += l->w_all;
             w_utfChange += l->utf8size_all;
             //l->parent->w_self -= w_selfChange;
             l->parent->w_all -=w_allChange;
             l->parent->utf8size_all -= w_utfChange;
         }
-        printf("%d\n", l->w_self);
+        // printf("%d\n", l->w_self);
         l = l->parent;
     }
-    printf("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
+    // printf("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
     if(l->w_self > l->w_all){
         printf("big bang\n");
     }
@@ -188,8 +189,8 @@ rope_tree_split(tnode *old, int index) {
     return curNode;
 }
 void printTreeCaller(tnode *n){
-    printTree(n);
-    printf("\n");
+    // printTree(n);
+    // printf("\n");
 }
 
 void printTree(tnode *n){
@@ -197,18 +198,18 @@ void printTree(tnode *n){
         printf("(false) ");
         return;
     }
-    printf("(true %p %d %d %d) ", n, n->w_self, n->w_all, n->utf8size_all);
-    printTree(n->left);
-    printTree(n->right);
+    // printf("(true %p %d %d %d) ", n, n->w_self, n->w_all, n->utf8size_all);
+    // printTree(n->left);
+    // printTree(n->right);
 }
 
 tnode *
 rope_tree_insert(tnode *self, int index, PyObject *st) {
     tnode *newStr = rope_tnode_alloc(st);
-    // printf("%d %d %d, %d %d %d\n", self->w_self, self->w_all, self->utf8size_all, 
+    // printf("%d %d %d, %d %d %d\n", self->w_self, self->w_all, self->utf8size_all,
     // self->left->w_self, self->left->w_all, self->left->utf8size_all);
     tnode *right = rope_tree_split(self, index);
-    
+
     self = rope_tree_concat(self, newStr);
     self = rope_tree_concat(self, right);
     // printf("%p %p %p %p %p %p\n", self, self->left, self->left->left, self->left->left->left, self->left->right, self->right);
@@ -223,11 +224,11 @@ rope_tree_insert(tnode *self, int index, PyObject *st) {
 
 tnode *
 rope_tree_delete(tnode *left, int l, int r) {
-    
+
     tnode *right = rope_tree_split(left, l);
     right = rope_tree_split(right, r - left->w_all);
     left = rope_tree_concat(left, right);
-    
+
     return left;
 }
 
@@ -327,7 +328,7 @@ rope_get_str(rope_object *self, PyObject *args, PyObject *kwds) {
     char *buff = malloc(self->tree_root->utf8size_all);
     Py_ssize_t s = 0;
     rope_inorder_UTF8_str(self->tree_root, buff, &s);
-printTreeCaller(self->tree_root);
+// printTreeCaller(self->tree_root);
     PyObject *str = PyUnicode_DecodeUTF8(buff, self->tree_root->utf8size_all, NULL);
 
     return Py_BuildValue("O", str);
@@ -467,7 +468,7 @@ static PyObject
     PyObject *str = NULL;
     PyArg_ParseTuple(args, "U", &str);
 
-    printf("%ld\n", PyUnicode_GetLength(str));
+    // printf("%ld\n", PyUnicode_GetLength(str));
 
     return Py_BuildValue("U", str);
 }

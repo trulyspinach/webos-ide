@@ -77,6 +77,7 @@ class SplashConnectModal extends React.Component {
           autoFocus
           margin="dense"
           id="name"
+          type="password"
           label="Shared Cipher"
           onChange={this.handleChange('cipher')}
           fullWidth
