@@ -172,8 +172,13 @@ rope_tree_insert(tnode *self, int index, PyObject *st) {
     printf("%d %d %d, %d %d %d\n", self->w_self, self->w_all, self->utf8size_all, 
     self->left->w_self, self->left->w_all, self->left->utf8size_all);
     tnode *right = rope_tree_split(self, index);
+<<<<<<< HEAD
     
     self = rope_tree_concat(self, newStr);
+=======
+    self = rope_tree_concat(self, newStr);
+
+>>>>>>> 36af04d25cf8c4cb3602fecbdec0fe05684a80ca
     self = rope_tree_concat(self, right);
     printf("%p %p %p %p %p %p\n", self, self->left, self->left->left, self->left->left->left, self->left->right, self->right);
     printf("%d %d %d, %d %d %d, %d %d %d, %d %d %d, %d %d %d, %d %d %d\n", self->w_self, self->w_all, self->utf8size_all,
@@ -198,8 +203,8 @@ rope_tree_delete(tnode *left, int l, int r) {
 PyObject *
 rope_concat_unicode(PyObject *a, PyObject *b) {
     Py_ssize_t size_a = 0, size_b = 0;
-    char *buf_a = PyUnicode_AsUTF8AndSize(a, &size_a);
-    char *buf_b = PyUnicode_AsUTF8AndSize(b, &size_b);
+    const char *buf_a = PyUnicode_AsUTF8AndSize(a, &size_a);
+    const char *buf_b = PyUnicode_AsUTF8AndSize(b, &size_b);
 
     //use stack so avoid small mallocs
     char *buf = malloc(size_a + size_b);
@@ -217,8 +222,8 @@ rope_concat_unicode(PyObject *a, PyObject *b) {
 void rope_inorder_UTF8_str(tnode *from, char *buf, Py_ssize_t *start) {
     if (rope_is_leaf(from)) {
         Py_ssize_t s = 0;
-        char *b = PyUnicode_AsUTF8AndSize(from->val, &s);
-        
+        const char *b = PyUnicode_AsUTF8AndSize(from->val, &s);
+
         memcpy(buf + *start, b, s);
         *start += s;
 

@@ -2,10 +2,25 @@ import asyncio
 import json
 import logging
 import websockets
+import spinach_rope as r
+
 from datetime import datetime
 
 def pack_message(method, data):
     return json.dumps({'m': method, 'd': data})
+
+
+class Rope:
+    def __init__(self, str):
+        self.rope = r.rope(str)
+
+    def replace(self, startIndex, length, text):
+        self.rope.delete(startIndex, startIndex + length)
+        self.rope.insert(startIndex, text)
+
+    def __repr__(self):
+        return self.rope.get_str()
+
 
 class FileEditService:
 
@@ -15,6 +30,7 @@ class FileEditService:
         self.id = id
         self.users = {}
         self.content = open(pathname,'r').read()
+        self.rope = Rope(self.content)
 
         self.methods = {
             'edit': self.on_edit
@@ -31,6 +47,13 @@ class FileEditService:
         self.users.pop(name, None)
 
     async def on_edit(self, name, d):
+        ddv = d['v']
+        edit_i = ddv['i']
+        edit_len = ddv['l']
+        edit_text = ddv['t']
+
+        self.rope.replace(edit_i, edit_len, edit_text)
+        print(self.rope)
         for k in self.users.keys():
             if k == name: continue
 

@@ -121,9 +121,9 @@ ws_methods = {
 }
 
 
-if not os.fork():
-    os.chdir("./devroot")
-    start_os_provider()
+# if not os.fork():
+#     os.chdir("./devroot")
+#     start_os_provider()
 
 
 print("serving")
