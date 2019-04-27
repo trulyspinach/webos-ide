@@ -6,7 +6,7 @@ class Rope:
 
     def replace(self, startIndex, length, text):
         self.rope.delete(startIndex, startIndex + length)
-        print("insert")
+        print(self)
         self.rope.insert(startIndex, text)
 
     def __repr__(self):
@@ -14,13 +14,9 @@ class Rope:
 
 
 tmp = Rope("")
-print("first")
 tmp.replace(0, 0, "a")
-print("second")
 tmp.replace(1, 0, "b")
-print("thrid")
-tmp.replace(2, 0, "c")
+tmp.replace(1, 0, "c")
 print(tmp)
 
-tmp.replace(0, 1, "")
-print(tmp)
+# tmp.replace(0, 1, "c")
