@@ -102,20 +102,21 @@ rope_tree_split(tnode *old, int index) {
     l->utf8size_all = s;
     l->w_self = l->w_all;
 
-    int w_selfChange;
+    int w_selfChange = 0;
     int w_allChange;
     int w_utfChange;
     if(l != old){
-        w_selfChange = l->parent->w_self - l->w_all;
         
+        printf("s2 %d %d\n", l->parent->w_self, l->w_all);
         int val = 0;
         int val2 = 0;
         if(l->parent->left == l && l->parent->right != NULL){
-            
+           w_selfChange = l->parent->w_self - l->w_all;
             val = l->parent->right->utf8size_all;
             val2 = l->parent->right->w_all;
         }
         if(l->parent->right == l && l->parent->left != NULL){
+            w_selfChange = 0;
             val = l->parent->left->utf8size_all;
             val2 = l->parent->left->w_all;
         }
@@ -136,6 +137,7 @@ rope_tree_split(tnode *old, int index) {
             l->parent->w_all -=w_allChange;
             l->parent->utf8size_all -= w_utfChange;
         }else{
+            printf("s %d\n", w_selfChange);
             l->parent->w_self -= w_selfChange;
             l->parent->w_all -=w_allChange;
             l->parent->utf8size_all -= w_utfChange;
@@ -167,17 +169,26 @@ rope_tree_split(tnode *old, int index) {
 tnode *
 rope_tree_insert(tnode *self, int index, PyObject *st) {
     tnode *newStr = rope_tnode_alloc(st);
+    printf("%d %d %d, %d %d %d\n", self->w_self, self->w_all, self->utf8size_all, 
+    self->left->w_self, self->left->w_all, self->left->utf8size_all);
     tnode *right = rope_tree_split(self, index);
-    self = rope_tree_concat(self, newStr);
     
+    self = rope_tree_concat(self, newStr);
     self = rope_tree_concat(self, right);
+    printf("%p %p %p %p %p %p\n", self, self->left, self->left->left, self->left->left->left, self->left->right, self->right);
+    printf("%d %d %d, %d %d %d, %d %d %d, %d %d %d, %d %d %d, %d %d %d\n", self->w_self, self->w_all, self->utf8size_all,
+           self->left->w_self, self->left->w_all, self->left->utf8size_all,
+           self->left->left->w_self, self->left->left->w_all, self->left->left->utf8size_all,
+           self->left->left->left->w_self, self->left->left->left->w_all, self->left->left->left->utf8size_all,
+           self->left->right->w_self, self->left->right->w_all, self->left->right->utf8size_all,
+           self->right->w_self, self->right->w_all, self->right->utf8size_all );
     return self;
 }
 
 tnode *
 rope_tree_delete(tnode *left, int l, int r) {
     tnode *right = rope_tree_split(left, l);
-    //printf("%d %d %d %d\n", l, r, left->w_all, right->w_all);
+    printf("%d %d %d %d\n", l, r, left->w_all, right->w_all);
     right = rope_tree_split(right, r - left->w_all);
     left = rope_tree_concat(left, right);
     return left;
