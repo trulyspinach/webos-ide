@@ -172,13 +172,8 @@ rope_tree_insert(tnode *self, int index, PyObject *st) {
     printf("%d %d %d, %d %d %d\n", self->w_self, self->w_all, self->utf8size_all, 
     self->left->w_self, self->left->w_all, self->left->utf8size_all);
     tnode *right = rope_tree_split(self, index);
-<<<<<<< HEAD
     
     self = rope_tree_concat(self, newStr);
-=======
-    self = rope_tree_concat(self, newStr);
-
->>>>>>> 36af04d25cf8c4cb3602fecbdec0fe05684a80ca
     self = rope_tree_concat(self, right);
     printf("%p %p %p %p %p %p\n", self, self->left, self->left->left, self->left->left->left, self->left->right, self->right);
     printf("%d %d %d, %d %d %d, %d %d %d, %d %d %d, %d %d %d, %d %d %d\n", self->w_self, self->w_all, self->utf8size_all,
