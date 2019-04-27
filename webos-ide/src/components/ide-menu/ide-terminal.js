@@ -36,7 +36,7 @@ class IDETerminalEmu extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      connected: true,
+      connected: false,
     }
 
     this.ws = props.ws;
@@ -68,6 +68,7 @@ class IDETerminalEmu extends React.Component {
 
     const editor = (
       <div className={classes.editor}>
+
       </div>
     );
 

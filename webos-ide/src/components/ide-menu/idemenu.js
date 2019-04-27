@@ -74,8 +74,8 @@ class IDE extends React.Component {
             <IDETextEditor ws={this.ws} windowTitle="Makefile" editorWidth={this.state.codeEditorWidth} editorHeight={this.state.codeEditorHeight}/>
           </IDETabbedWindow>
           <IDETabbedWindow>
-            <IDETerminalEmu windowTitle="Terminal 1"/>
-            <IDETerminalEmu windowTitle="Terminal 2"/>
+            <IDETerminalEmu ws={this.ws} windowTitle="Terminal 1"/>
+            <IDETerminalEmu ws={this.ws} windowTitle="Terminal 2"/>
           </IDETabbedWindow>
         </SplitLayoutVertical>
 
