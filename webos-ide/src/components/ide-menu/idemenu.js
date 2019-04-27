@@ -29,6 +29,10 @@ const styles = theme => ({
     height: '100%'
   },
 
+  share: {
+    marginLeft:10,
+    // marginLeft:"75%",
+  },
 
   blankPage: {
     height: '100%',

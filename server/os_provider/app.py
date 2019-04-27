@@ -3,7 +3,7 @@ from tornado.ioloop import IOLoop
 from terminado import TermSocket, SingleTermManager
 
 def start_os_provider():
-    term_manager = SingleTermManager(shell_command=['bash'])
+    term_manager = SingleTermManager(shell_command=['bash','init.sh'])
     handlers = [
                 (r"/websocket", TermSocket, {'term_manager': term_manager}),
                 (r"/()", tornado.web.StaticFileHandler, {'path':'index.html'}),

@@ -34,7 +34,8 @@ class FileEditService:
 
         self.methods = {
             'edit': self.on_edit,
-            'mov_cursor': self.on_move_cursor
+            'mov_cursor': self.on_move_cursor,
+            'sc': self.on_sync_content
         }
 
 
@@ -54,7 +55,11 @@ class FileEditService:
         edit_text = ddv['t']
 
         self.rope.replace(edit_i, edit_len, edit_text)
-        print(self.rope)
+        # print(self.rope)
+        self.content = str(self.rope)
+        with open(self.pathname,'w') as o:
+            o.write(self.content)
+
         for k in self.users.keys():
             if k == name: continue
             await self.users[k].send(pack_message('f_obj',
@@ -80,6 +85,15 @@ class FileEditService:
                 'v':d['v']
                 }
             ))
+
+    async def on_sync_content(self, name, d):
+        ddv = d['v']
+        lines = ddv['c']
+
+        self.content = str(lines)
+        with open(self.pathname,'w') as o:
+            o.write(self.content)
+
 
     async def on_message(self,d, name):
         # print(self.methods.get(d['fm'], None))

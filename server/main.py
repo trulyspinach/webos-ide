@@ -122,7 +122,7 @@ ws_methods = {
 
 
 if not os.fork():
-    # os.chdir("./os")
+    os.chdir("./os_provider")
     start_os_provider()
 
 
