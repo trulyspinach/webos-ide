@@ -74,6 +74,8 @@ class IDETabbedWindow extends React.Component {
     const { value } = this.state;
 
     let childrenDOMs = React.Children.toArray(this.props.children);
+    if(childrenDOMs.length !== this.state.windows.length)
+      this.getWindows();
 
     return (
       <div className={classes.root}>

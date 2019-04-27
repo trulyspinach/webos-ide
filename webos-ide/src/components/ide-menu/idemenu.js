@@ -27,6 +27,17 @@ const styles = theme => ({
 
   fullWidthPanel: {
     height: '100%'
+  },
+
+
+  blankPage: {
+    height: '100%',
+    backgroundColor: '#37474f',
+    textAlign:'center',
+  },
+
+  blankPageText: {
+    padding: '40px'
   }
 });
 
@@ -40,6 +51,7 @@ class IDE extends React.Component {
 
       codeEditorWidth: 0,
       codeEditorHeight: 0,
+      openedFiles: [],
     }
 
     this.ws = props.ws;
@@ -55,6 +67,13 @@ class IDE extends React.Component {
     console.log(newValue);
   }
 
+  onNewFileOpened = (filename, id) => {
+    let fobj = {name: filename, id: id}
+    this.setState({
+      openedFiles: this.state.openedFiles.concat([fobj])
+    });
+  }
+
   render(){
 
     const { classes } = this.props;
@@ -64,14 +83,20 @@ class IDE extends React.Component {
     };
     //<IDETextEditor editorWidth={this.state.codeEditorWidth}/>
 
+
+
     return(
       <SplitLayout masterMin={280} slaveMin={280} onResized={(m,s) => {this.setState({codeEditorWidth:s})}}>
-        <FileManagerView  ws={this.ws}/>
+        <FileManagerView  ws={this.ws} onOpenFile={this.onNewFileOpened}/>
 
         <SplitLayoutVertical masterMin={500} slaveMin={200} onResized={(m,s) => {this.setState({codeEditorHeight:m})}}>
-          <IDETabbedWindow>
-            <IDETextEditor ws={this.ws} windowTitle="Makefile" editorWidth={this.state.codeEditorWidth} editorHeight={this.state.codeEditorHeight}/>
-            <IDETextEditor ws={this.ws} windowTitle="Makefile" editorWidth={this.state.codeEditorWidth} editorHeight={this.state.codeEditorHeight}/>
+          <IDETabbedWindow size={this.state.openedFiles.length}>
+          {
+              this.state.openedFiles.length > 0?
+              this.state.openedFiles.map(d => {
+                return (<IDETextEditor ws={this.ws} fid={d.id} windowTitle={d.name} editorWidth={this.state.codeEditorWidth} editorHeight={this.state.codeEditorHeight}/>)
+              }) : (<div className={classes.blankPage}></div>)
+          }
           </IDETabbedWindow>
           <IDETabbedWindow>
             <IDETerminalEmu ws={this.ws} windowTitle="Terminal 1"/>

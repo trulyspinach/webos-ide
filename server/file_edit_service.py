@@ -9,10 +9,12 @@ def pack_message(method, data):
 
 class FileEditService:
 
-    def __init__(self,id):
+    def __init__(self,id, pathname):
+        self.pathname = pathname
+        self.filename = pathname[pathname.rfind("/")+1:]
         self.id = id
         self.users = {}
-        self.content = "//type your code here..."
+        self.content = open(pathname,'r').read()
 
         self.methods = {
             'edit': self.on_edit

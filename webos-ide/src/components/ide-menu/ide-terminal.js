@@ -13,7 +13,7 @@ const styles = theme => ({
 
   editor:{
     margin: 0,
-    backgroundColor: '#d500f9',
+    backgroundColor: '#000000',
     height:'100%',
   },
 
@@ -28,6 +28,14 @@ const styles = theme => ({
     marginTop: 40,
   },
 
+  term: {
+      padding:"10px",
+      // paddingBottom:"20%",
+   height:'85%',
+    width:'100%',
+    borderWidth:'0px',
+  },
+
 });
 
 
@@ -36,7 +44,7 @@ class IDETerminalEmu extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      connected: false,
+      connected: true,
     }
 
     this.ws = props.ws;
@@ -44,13 +52,13 @@ class IDETerminalEmu extends React.Component {
   }
 
 
-  componentDidMount = () =>{
+  componentDidMount = () => {
+
   }
 
   componentWillUnmount = () => {
 
   }
-
 
   render(){
 
@@ -68,7 +76,7 @@ class IDETerminalEmu extends React.Component {
 
     const editor = (
       <div className={classes.editor}>
-
+        <iframe src={"http://"+window.location.hostname+":8020"} className={classes.term} ></iframe>
       </div>
     );
 

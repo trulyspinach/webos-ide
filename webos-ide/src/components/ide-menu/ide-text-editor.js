@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+// import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import * as monaco from 'monaco-editor';
 import MonacoEditor from 'react-monaco-editor';
 
 import Button from '@material-ui/core/Button';
@@ -39,6 +40,7 @@ class IDETextEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      name : "dedddwd",
       connected: false,
       code: '// type your code...',
     }
@@ -48,16 +50,20 @@ class IDETextEditor extends React.Component {
     this.editing = false;
   }
 
+  getName = () => {
+    return this.state.name
+  }
+
   onWSMessage = (e) => {
     let d = JSON.parse(e.data)
     if(d.m == "f_req"){
-      if(d.d.id != 0) return;
+      if(d.d.id != this.props.fid) return;
 
       this.setState({connected:true, code: d.d.initc})
     }
 
     if(d.m == "f_obj"){
-      if(d.d.id != 0) return;
+      if(d.d.id != this.props.fid) return;
       let v = d.d.v;
       var range = new monaco.Range(v.ls, v.cs, v.le, v.ce);
       var id = { major: 1, minor: 1 };
@@ -71,11 +77,10 @@ class IDETextEditor extends React.Component {
 
   componentDidMount = () =>{
     this.ws.addEventListener('message', this.onWSMessage)
-
     this.ws.send(JSON.stringify(
       {
         m:'f_req',
-        d:{id:'0',}
+        d:{id:this.props.fid,fsf:"sss"}
       }
     ))
 
@@ -137,7 +142,7 @@ class IDETextEditor extends React.Component {
         width={this.props.editorWidth}
         height={this.props.editorHeight}
         className={classes.editor}
-        language="javascript"
+        language="c"
         theme="vs-dark"
         value={code}
         options={options}
