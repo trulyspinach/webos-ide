@@ -107,11 +107,11 @@ rope_tree_split(tnode *old, int index) {
     int w_utfChange;
     if(l != old){
         w_selfChange = l->parent->w_self - l->w_all;
-        
+
         int val = 0;
         int val2 = 0;
         if(l->parent->left == l && l->parent->right != NULL){
-            
+
             val = l->parent->right->utf8size_all;
             val2 = l->parent->right->w_all;
         }
@@ -169,7 +169,7 @@ rope_tree_insert(tnode *self, int index, PyObject *st) {
     tnode *newStr = rope_tnode_alloc(st);
     tnode *right = rope_tree_split(self, index);
     self = rope_tree_concat(self, newStr);
-    
+
     self = rope_tree_concat(self, right);
     return self;
 }
@@ -187,8 +187,8 @@ rope_tree_delete(tnode *left, int l, int r) {
 PyObject *
 rope_concat_unicode(PyObject *a, PyObject *b) {
     Py_ssize_t size_a = 0, size_b = 0;
-    char *buf_a = PyUnicode_AsUTF8AndSize(a, &size_a);
-    char *buf_b = PyUnicode_AsUTF8AndSize(b, &size_b);
+    const char *buf_a = PyUnicode_AsUTF8AndSize(a, &size_a);
+    const char *buf_b = PyUnicode_AsUTF8AndSize(b, &size_b);
 
     //use stack so avoid small mallocs
     char *buf = malloc(size_a + size_b);
@@ -206,8 +206,8 @@ rope_concat_unicode(PyObject *a, PyObject *b) {
 void rope_inorder_UTF8_str(tnode *from, char *buf, Py_ssize_t *start) {
     if (rope_is_leaf(from)) {
         Py_ssize_t s = 0;
-        char *b = PyUnicode_AsUTF8AndSize(from->val, &s);
-        
+        const char *b = PyUnicode_AsUTF8AndSize(from->val, &s);
+
         memcpy(buf + *start, b, s);
         *start += s;
 

@@ -110,9 +110,11 @@ class IDETextEditor extends React.Component {
         le:range.endLineNumber,
         cs:range.startColumn,
         ce:range.endColumn,
+        i:e.changes[i].rangeOffset,
+        l:e.changes[i].rangeLength,
         t: e.changes[i].text
       }
-
+      console.log(v)
       this.ws.send(JSON.stringify(
         {
           m:'f_obj',
