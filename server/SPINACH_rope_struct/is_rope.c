@@ -177,7 +177,7 @@ rope_tree_insert(tnode *self, int index, PyObject *st) {
 tnode *
 rope_tree_delete(tnode *left, int l, int r) {
     tnode *right = rope_tree_split(left, l);
-    printf("%d %d %d %d\n", l, r, left->w_all, right->w_all);
+    //printf("%d %d %d %d\n", l, r, left->w_all, right->w_all);
     right = rope_tree_split(right, r - left->w_all);
     left = rope_tree_concat(left, right);
     return left;

@@ -1,29 +1,21 @@
 import spinach_rope as r
 
-#
-a = r.rope("hello,")
-b = r.rope("world")
-c = r.rope(" i am allen")
+class Rope:
+    def __init__(self, str):
+        self.rope = r.rope(str)
 
-# print(r.strconcat("de","dejujijijijij"))
-# print(a.get_str() + b.get_str())
+    def replace(self, startIndex, length, text):
+        self.rope.delete(startIndex, startIndex + length)
+        self.rope.insert(startIndex, text)
 
-d = r.concat(a, b)
-e = r.concat(d, c)
-# for i in range(20):
-#     print(e.indexat(i))
-print(e.get_str())
+    def __repr__(self):
+        return self.rope.get_str()
 
-right = r.split(e, 10)
-print(right.get_str())
-print(e.get_str())
 
-e = r.concat(e, right)
-print(e.get_str())
+tmp = Rope("hello World")
 
-e.insert(2, "continue last dying breath")
-print(e.get_str())
-e.delete(2, 3)
-print(e.get_str())
+tmp.replace(1, 3, "")
+print(tmp)
+
 
 
